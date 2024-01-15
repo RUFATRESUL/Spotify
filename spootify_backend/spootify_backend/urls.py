@@ -18,10 +18,10 @@ from django.contrib import admin
 from django.urls import path,include
 from os import getenv
 
-api_patterns = {
+api_patterns = [
     path('',include('song.urls')),
     path('',include('user.urls'))
-}
+]
 
 urlpatterns = [
     path(getenv('ADMIN_URL'), admin.site.urls),

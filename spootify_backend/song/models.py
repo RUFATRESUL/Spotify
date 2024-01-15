@@ -8,6 +8,10 @@ class Genre(models.Model):
     updated = models.DateField(auto_now_add=True)
     created = models.DateField(auto_now_add=True)
 
+    def __str__(self):
+        return self.title
+    
+
 
 class Playlist(models.Model):
     title = models.TextField()
@@ -17,8 +21,9 @@ class Playlist(models.Model):
     updated = models.DateField(auto_now_add=True)
     created = models.DateField(auto_now_add=True)
 
-
-
+    def __str__(self):
+        return self.title
+    
 
 
 class Song(models.Model):
@@ -29,8 +34,12 @@ class Song(models.Model):
     duration = models.IntegerField()
     lyrics = models.TextField(null=True,blank=True)
     genres = models.ManyToManyField(Genre)
-    playlists = models.ManyToManyField(Playlist)
+    playlists = models.ManyToManyField(Playlist,null=True,blank=True)
     listen_count = models.BigIntegerField(default=0)
     updated = models.DateField(auto_now=True)
     created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+    
 
