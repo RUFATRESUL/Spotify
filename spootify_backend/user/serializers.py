@@ -4,6 +4,7 @@ from .models import GENDER_CHOICE,Customer
 from rest_framework.authtoken.models import Token
 
 class RegisterSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
     username = serializers.CharField(source='user.username')
@@ -27,6 +28,7 @@ class RegisterSerializer(serializers.Serializer):
     
 
 class CustomerInfoSerializer(serializers.Serializer):
+    id = serializers.IntegerField(read_only=True)
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
     username = serializers.CharField(source='user.username')
@@ -37,7 +39,7 @@ class CustomerInfoSerializer(serializers.Serializer):
 
     class Meta:
         model = Customer
-        fields = ['first_name','last_name','username','email','birth_date','gender','token']
+        fields = ['id','first_name','last_name','username','email','birth_date','gender','token']
 
     def get_token(self,customer):
         token,created = Token.objects.get_or_create(user=customer.user)
