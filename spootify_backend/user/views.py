@@ -17,11 +17,19 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from song.serializers import(
     PlayListSerializer,
-    SongSerializer
+    SongSerializer,
+   
+)
+from user.serializers import(
+    ArtistSerializer
 )
 from song.models import (
     Playlist,
-    Song
+    Song,
+  
+)
+from .models import (
+    Artist
 )
 
 class LikedPlayListAV(ListAPIView):
@@ -36,6 +44,17 @@ class LikedSongListAV(ListAPIView):
         return self.request.user.customer.liked_songs.all()
     serializer_class = SongSerializer
     permission_classes = [IsAuthenticated]
+
+class FollowingListAV(ListAPIView):
+    def get_queryset(self):
+        return self.request.user.customer.followed_artists.all()
+    serializer_class = ArtistSerializer
+    permission_classes = [(IsAuthenticated)]
+
+class ArtistsListAV(ListAPIView):
+    queryset = Artist.objects.all()
+    serializer_class = ArtistSerializer
+    permission_classes = [(IsAuthenticated)]
 
 # Create your views here.
     
@@ -64,7 +83,21 @@ def liked_songs(request,pk):
 @permission_classes([IsAuthenticated])
 def unlike_songs(request,pk):
     song = get_object_or_404(Song,pk=pk)
-    request.user.customer.liked_songs.add(song)
+    request.user.customer.liked_songs.remove(song)
+    return Response(status=status.HTTP_202_ACCEPTED)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def follow_artist(request,pk):
+    artist = get_object_or_404(Artist,pk=pk)
+    request.user.customer.followed_artists.add(artist)
+    return Response(status=status.HTTP_202_ACCEPTED)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def unfollow_artist(request,pk):
+    artist = get_object_or_404(Artist,pk=pk)
+    request.user.customer.followed_artists.remove(artist)
     return Response(status=status.HTTP_202_ACCEPTED)
 
 
